@@ -1,0 +1,15 @@
+
+import socket
+
+def main():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect(('127.0.0.1', 2222))
+    fahrenheit = input("Enter temperature in Fahrenheit: ")
+    client_socket.send(fahrenheit.encode())
+    celsius = client_socket.recv(1024)
+    celsius = celsius.decode()
+    print("Temperature in Celsius: ", celsius)
+    client_socket.close()
+
+if __name__ == '__main__':
+    main()
