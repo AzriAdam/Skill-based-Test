@@ -1,0 +1,26 @@
+import socket
+import threading
+import random
+
+quotes = ["The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart.",
+          "Happiness is not something ready made. It comes from your own actions."]
+
+def handle_client(client_socket):
+    quote = random.choice(quotes)
+    client_socket.send(quote.encode())
+    client_socket.close()
+
+def main():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind(('127.0.0.1', 8888))
+    server_socket.listen(5)
+
+    print("Server started!")
+    while True:
+        client_socket, address = server_socket.accept()
+        print(f"Connection from {address}")
+        client_thread = threading.Thread(target=handle_client, args=(client_socket,))
+        client_thread.start()
+
+if __name__ == '__main__':
+    main()
