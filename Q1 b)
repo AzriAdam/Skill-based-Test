@@ -1,0 +1,25 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+int main() {
+    int sockfd, n;
+    struct sockaddr_in servaddr;
+    int num;
+
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port = htons(8080);
+    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    bind(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr));
+
+    while (1) {
+        recvfrom(sockfd, &num, sizeof(num), 0, NULL, NULL);
+        printf("Random number received: %d\n", num);
+    }
+    return 0;
+}
+
