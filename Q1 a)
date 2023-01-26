@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+
+int main() {
+    int sockfd, n;
+    struct sockaddr_in servaddr, cliaddr;
+    socklen_t len;
+    int num;
+
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+    servaddr.sin_port = htons(3333);
+    bind(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr));
+
+    len = sizeof(cliaddr);
+    while (1) {
+        num = rand() % 900 + 100; //generate random number between 100 and 999
+        sendto(sockfd, &num, sizeof(num), 0, (struct sockaddr *) &cliaddr, len);
+        printf("Random number sent: %d\n", num);
+    }
+    return 0;
+
+}
